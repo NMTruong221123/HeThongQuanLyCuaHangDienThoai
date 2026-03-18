@@ -1,0 +1,63 @@
+%% PhoneStore Use Case Diagram (Mermaid)
+%% Generated: 2026-03-10
+
+usecaseDiagram
+
+actor Admin
+actor Manager
+actor Cashier
+actor "Warehouse Staff" as WS
+actor Supplier
+actor Customer
+actor "Payment Gateway" as PG
+
+Admin --> (Login)
+Manager --> (Login)
+Cashier --> (Login)
+WS --> (Login)
+
+Admin --> (Manage Accounts)
+Admin --> (Manage Employees)
+Manager --> (Manage Employees)
+
+Admin --> (Manage Products)
+Manager --> (Manage Products)
+Admin --> (Manage Attributes)
+Manager --> (Manage Attributes)
+
+Manager --> (Create Import Receipt)
+WS --> (Enter IMEIs)
+(Enter IMEIs) ..> (Create Import Receipt) : include
+Manager --> (Bind IMEIs to Import Line)
+
+Cashier --> (Create Export/Sale Receipt)
+Cashier --> (Select Items / Reserve IMEIs)
+(Cashier) --> (Process Payment)
+Customer --> (Pay by Cash)
+Customer --> (Pay by Card)
+Customer --> (Pay by Bank Transfer / QR)
+
+("Process Payment") ..> ("Bank Transfer Confirmation") : include
+PG --> ("Bank Transfer Confirmation")
+("Bank Transfer Confirmation") ..> ("Auto-confirm Transfer (QR Polling)") : extend
+
+Admin --> (View Reports & Statistics)
+Manager --> (View Reports & Statistics)
+
+Admin --> (Configure System Settings)
+
+"Search / Lookup" as Search
+Admin --> Search
+Manager --> Search
+Cashier --> Search
+WS --> Search
+
+note right of (Bind IMEIs to Import Line)
+  IMEIs are stored per product+variant
+  and linked to the import receipt line
+end note
+
+note left of (Select Items / Reserve IMEIs)
+  Export consumes IMEIs by variant
+  (not from a global pool)
+end note
