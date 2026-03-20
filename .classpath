@@ -3,13 +3,13 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry excluding="_debug_export_check.sql" kind="src" path="tools"/>
-	<classpathentry kind="lib" path="lib/flatlaf-3.0.jar"/>
-	<classpathentry kind="lib" path="lib/flatlaf-extras-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/flatlaf-fonts-roboto-2.137.jar"/>
-	<classpathentry kind="lib" path="lib/jbcrypt-0.4.jar"/>
-	<classpathentry kind="lib" path="lib/LGoodDatePicker-11.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-8.0.30.jar"/>
-	<classpathentry kind="lib" path="lib/svgSalamander-1.1.4.jar"/>
-	<classpathentry kind="lib" path="lib/zxing-core-3.5.3.jar"/>
+	<classpathentry kind="lib" path="E:/PhoneStoreManagement/lib/flatlaf-3.0.jar"/>
+	<classpathentry kind="lib" path="E:/PhoneStoreManagement/lib/flatlaf-extras-3.1.jar"/>
+	<classpathentry kind="lib" path="E:/PhoneStoreManagement/lib/flatlaf-fonts-roboto-2.137.jar"/>
+	<classpathentry kind="lib" path="E:/PhoneStoreManagement/lib/jbcrypt-0.4.jar"/>
+	<classpathentry kind="lib" path="E:/PhoneStoreManagement/lib/LGoodDatePicker-11.2.1.jar"/>
+	<classpathentry kind="lib" path="E:/PhoneStoreManagement/lib/mysql-connector-java-8.0.30.jar"/>
+	<classpathentry kind="lib" path="E:/PhoneStoreManagement/lib/svgSalamander-1.1.4.jar"/>
+	<classpathentry kind="lib" path="E:/PhoneStoreManagement/lib/zxing-core-3.5.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
