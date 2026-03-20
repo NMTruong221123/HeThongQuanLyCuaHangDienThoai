@@ -418,6 +418,10 @@ public class AccountFormDialog extends JDialog {
 
     private boolean isCurrentUserWarehouseManager(UserSession session) {
         if (session == null) return false;
+        // Prefer effective permission check to avoid depending on exact role naming in DB.
+        if (session.hasPermission("warehouse_zones") && session.hasPermission("accounts")) {
+            return true;
+        }
         for (String p : session.getPermissions()) {
             if (p == null) continue;
             String n = normalizeRoleName(p);
