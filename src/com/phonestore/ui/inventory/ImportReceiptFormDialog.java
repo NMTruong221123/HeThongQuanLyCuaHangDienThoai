@@ -481,7 +481,20 @@ public class ImportReceiptFormDialog extends JDialog {
     private void loadComboData() {
         try {
             List<Supplier> suppliers = supplierController.findAll();
-            cbSupplier.setModel(new DefaultComboBoxModel<>(suppliers.toArray(new Supplier[0])));
+            List<Supplier> visibleSuppliers = new ArrayList<>();
+            Long editingSupplierId = editing == null ? null : editing.getSupplierId();
+
+            for (Supplier s : suppliers) {
+                if (s == null) continue;
+                boolean active = s.getStatus() != null && s.getStatus() == 1;
+                // For add-new flow, only show active suppliers.
+                // For editing/viewing existing receipt, keep current supplier visible even if inactive.
+                if (active || (editingSupplierId != null && s.getId() == editingSupplierId)) {
+                    visibleSuppliers.add(s);
+                }
+            }
+
+            cbSupplier.setModel(new DefaultComboBoxModel<>(visibleSuppliers.toArray(new Supplier[0])));
         } catch (Throwable ex) {
             Toast.error(this, ex.getMessage() == null ? ex.toString() : ex.getMessage());
             cbSupplier.setModel(new DefaultComboBoxModel<>(new Supplier[0]));
