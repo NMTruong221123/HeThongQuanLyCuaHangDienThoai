@@ -3,6 +3,8 @@ package com.phonestore.ui.employee;
 import com.phonestore.controller.EmployeeController;
 import com.phonestore.model.Employee;
 import com.phonestore.model.UserAccount;
+import com.phonestore.ui.common.session.SessionContext;
+import com.phonestore.ui.common.session.UserSession;
 import com.phonestore.ui.common.toast.Toast;
 
 import javax.swing.*;
@@ -338,6 +340,10 @@ public class AccountFormDialog extends JDialog {
             com.phonestore.dao.NhomQuyenDao dao = new com.phonestore.dao.jdbc.NhomQuyenJdbcDao();
             java.util.List<com.phonestore.model.NhomQuyen> rs = dao.findAll();
 
+            UserSession session = SessionContext.getSession();
+            boolean currentIsAdmin = isCurrentUserAdmin(session);
+            boolean currentIsWarehouseManager = isCurrentUserWarehouseManager(session);
+
             // Determine which role IDs are considered ADMIN (name contains 'admin')
             java.util.Set<Integer> adminRoleIds = new java.util.HashSet<>();
             for (com.phonestore.model.NhomQuyen r : rs) {
@@ -371,6 +377,18 @@ public class AccountFormDialog extends JDialog {
                 if (r.getStatus() == null || r.getStatus() != 1) continue; // only active roles
                 Integer id = r.getId();
                 String name = r.getName() == null ? ("Role " + id) : r.getName();
+                String normalizedRoleName = normalizeRoleName(name);
+
+                // Restrict role assignment when adding account:
+                // - ADMIN can assign all active roles.
+                // - Warehouse manager can only assign warehouse-manager and import/export staff roles.
+                if (editing == null && currentIsWarehouseManager && !currentIsAdmin) {
+                    boolean allowWarehouseManagerRole = isWarehouseManagerRoleName(normalizedRoleName);
+                    boolean allowImportExportRole = isImportOrExportStaffRoleName(normalizedRoleName);
+                    if (!allowWarehouseManagerRole && !allowImportExportRole) {
+                        continue;
+                    }
+                }
 
                 // When ADMIN is already at max (2 accounts), do not allow selecting ADMIN for new account
                 // or for editing a non-admin account. Keep ADMIN available only when editing an existing admin.
@@ -385,6 +403,47 @@ public class AccountFormDialog extends JDialog {
             com.phonestore.ui.common.toast.Toast.error(this, ex.getMessage() == null ? ex.toString() : ex.getMessage());
         }
         if (cbRole.getItemCount() > 0) cbRole.setSelectedIndex(0);
+    }
+
+    private boolean isCurrentUserAdmin(UserSession session) {
+        if (session == null) return false;
+        for (String p : session.getPermissions()) {
+            if (p == null) continue;
+            String n = p.trim().toLowerCase(java.util.Locale.ROOT);
+            if ("role:admin".equals(n)) return true;
+            if (n.startsWith("role:") && n.contains("admin")) return true;
+        }
+        return false;
+    }
+
+    private boolean isCurrentUserWarehouseManager(UserSession session) {
+        if (session == null) return false;
+        for (String p : session.getPermissions()) {
+            if (p == null) continue;
+            String n = normalizeRoleName(p);
+            if (n.startsWith("role:") && (n.contains("quan ly kho") || n.contains("quản lý kho"))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isWarehouseManagerRoleName(String normalizedRoleName) {
+        return normalizedRoleName.contains("quan ly kho") || normalizedRoleName.contains("quản lý kho");
+    }
+
+    private boolean isImportOrExportStaffRoleName(String normalizedRoleName) {
+        if (normalizedRoleName.contains("nhap xuat") || normalizedRoleName.contains("nhập xuất")) {
+            return true;
+        }
+        boolean hasStaff = normalizedRoleName.contains("nhan vien") || normalizedRoleName.contains("nhân viên");
+        boolean hasImport = normalizedRoleName.contains("nhap") || normalizedRoleName.contains("nhập");
+        boolean hasExport = normalizedRoleName.contains("xuat") || normalizedRoleName.contains("xuất");
+        return hasStaff && (hasImport || hasExport);
+    }
+
+    private String normalizeRoleName(String s) {
+        return s == null ? "" : s.trim().toLowerCase(java.util.Locale.ROOT);
     }
 
     private void selectEmployee(long employeeId) {
