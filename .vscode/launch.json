@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Run Main (No Build)",
+      "request": "launch",
+      "mainClass": "com.phonestore.Main",
+      "cwd": "${workspaceFolder}",
+      "classPaths": [
+        "${workspaceFolder}/bin",
+        "${workspaceFolder}/lib/*"
+      ],
+      "noBuild": true
+    }
+  ]
+}
