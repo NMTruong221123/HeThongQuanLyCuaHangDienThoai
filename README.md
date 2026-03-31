@@ -1,5 +1,18 @@
 # 📌 XÂY DỰNG HỆ THỐNG QUẢN LÝ CỬA HÀNG ĐIỆN THOẠI PHONESTORE TRÊN NỀN TẢNG DESKTOP
 
+## 🔑 0. Tài khoản
+
+Danh sách tài khoản:
+
+- Tk admin:
+  Tk: `nmtadmin` mk: `123456`
+- Tk QLkho:
+  Tk: `QLK` mk: `123456`
+- Tk NVNhap:
+  Tk: `pn` mk: `123456`
+- Tk NVXuat:
+  Tk: `px` mk: `123456`
+
 ## 📌 1. Giới thiệu
 PhoneStoreManagement là hệ thống desktop hỗ trợ cửa hàng điện thoại quản lý tập trung các nghiệp vụ cốt lõi:
 
